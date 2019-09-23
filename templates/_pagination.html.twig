@@ -1,0 +1,54 @@
+{# templates/post/_pagination.html.twig #}
+{% set route = app.request.get('_route') %}
+{% set page_no = app.request.get('page_no') %}
+{% set category_name = app.request.get('name') %}
+{% if page_count > 1 %}
+    <div class="col-lg-12">
+        <nav class="text-center">
+            <ul class="pagination">
+
+                {% if page_no != '1' %}
+                    <li>
+                        {% if route == 'category' %}
+                        <a href="{{ path(route, {name: category_name, page_no: page_no - 1}) }}" aria-label="Previous">
+                        {% else %}
+                        <a href="{{ path(route, {page_no: page_no - 1}) }}" aria-label="Previous">
+                        {% endif %}
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+
+                {% for page in 1..page_count %}
+                    {% if page == page_no %}
+                        {% if route == 'category' %}
+                        <li class="active"><a href="{{ path(route, {name: category_name, page_no: page}) }}">{{ page }} <span class="sr-only">(current)</span></a></li>
+                        {% else %}
+                        <li class="active"><a href="{{ path(route, {page_no: page}) }}">{{ page }} <span class="sr-only">(current)</span></a></li>
+                        {% endif %}
+                    {% else %}
+                        {% if route == 'category' %}
+                        <li><a href="{{ path(route, {name: category_name, page_no: page}) }}">{{ page }}</a></li>
+                        {% else %}
+                        <li><a href="{{ path(route, {page_no: page}) }}">{{ page }}</a></li>
+                        {% endif %}
+
+                    {% endif %}
+                {% endfor %}
+
+                {% if page_no != page_count %}
+                    <li>
+                        {% if route == 'category' %}
+                        <a href="{{ path(route, {name: category_name, page_no: page_no + 1}) }}" aria-label="Next">
+                        {% else %}
+                        <a href="{{ path(route, {page_no: page_no + 1}) }}" aria-label="Next">
+                        {% endif %}
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                {% endif %}
+
+            </ul>
+        </nav>
+    </div>
+{% endif %}

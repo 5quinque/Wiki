@@ -1,0 +1,10 @@
+{# templates/post/post.html.twig #}
+
+{% extends '_init5.html.twig' %}
+
+{% block title %}New post{% endblock %}
+{% set panel_title = 'Delete post' %}
+
+{% block body %}
+{% include('forms/delete.html.twig') %}
+{% endblock %}

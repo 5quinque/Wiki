@@ -1,0 +1,31 @@
+{# templates/_postcolumns.html.twig #}
+<div class="container">
+    {% if posts|length %}
+        {% for split in posts|batch((posts|length / 2)|round(0, 'ceil')) %}
+            <div class="col-lg-6">
+                {% for post in split %}
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">{{ post.title|split('', 40)[0] }}{% if post.title|length >= 40 %}... {% endif %}
+                            <span class="pull-right">
+                                <a class="btn btn-default" href="{{ path('post_show', {slug: post.slug}) }}" role="button">More</a>
+                                {% if app.user %}
+                                    <a class="btn btn-default" href="{{ path('post_create', {slug: post.slug}) }}" role="button">Edit</a>
+                                    <a class="btn btn-danger" href="{{ path('post_delete', {slug: post.slug}) }}" role="button">Delete</a>
+                                {% endif %}
+                            </span>
+                        </h3>
+                    </div>
+                    <div class="panel-body">
+                        {{ post.content|raw }}
+                    </div>
+                    <div class="panel-footer">
+                        <a href="{{ path('category', {name: post.category.name}) }}">{{ post.category.name }}</a>
+                    </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+{% include('_pagination.html.twig') %}

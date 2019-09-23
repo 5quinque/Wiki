@@ -1,0 +1,7 @@
+{# templates/post/_header.html.twig #}
+{% set currentPath = path(app.request.attributes.get('_route'),
+                       app.request.attributes.get('_route_params')) %}
+{% include('_header.html.twig') %}
+  {% block body %}{% endblock %}
+{% include('_footer.html.twig') %}
+{% block javascript %}{% endblock %}

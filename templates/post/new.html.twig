@@ -1,0 +1,33 @@
+{# templates/post/post.html.twig #}
+
+{% extends '_init5.html.twig' %}
+
+{% block title %}New post{% endblock %}
+{% set panel_title = 'Create a new post' %}
+
+{% block body %}
+{% include('forms/post.html.twig') %}
+{% endblock %}
+
+{% block javascript %}
+<script>
+let urlManuallyChanged = false;
+
+$('#post_title').on('input', function () {
+    if (!urlManuallyChanged) {
+        var url = $('#post_title').val().replace(/\s/g, '-');
+        url = url.replace(/[^\w-]/g, '');
+        url = url.toLowerCase();
+        $('#post_slug').val(url);
+    }
+});
+
+$('#post_slug').on('input', function () {
+    urlManuallyChanged = true;
+});
+
+tinymce.init({
+    selector: 'textarea',
+});
+</script>
+{% endblock %}

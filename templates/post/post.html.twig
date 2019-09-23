@@ -1,0 +1,31 @@
+{# templates/post/post.html.twig #}
+
+{% extends '_init5.html.twig' %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">{{ post.title }}
+                    <span class="pull-right">
+                        {% if app.user %}
+                        <a class="btn btn-default" href="{{ path('post_create', {slug: post.slug}) }}" role="button">Edit</a>
+                        <a class="btn btn-danger" href="{{ path('post_delete', {slug: post.slug}) }}" role="button">Delete</a>
+                        {% endif %}
+                    </span>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    {{ post.content|raw }}
+                </div>
+                <div class="panel-footer">
+                    <a href="{{ path('category', {name: post.category}) }}">{{ post.category }}</a>
+                    <small class="pull-right">{{ post.created|date("Y-m-d H:i:s") }}</small>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
