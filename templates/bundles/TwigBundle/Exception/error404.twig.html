@@ -1,0 +1,15 @@
+{# templates/bundles/TwigBundle.html.twig #}
+
+{% extends '_init5.html.twig' %}
+
+{% block title %}404 - Page Not Found{% endblock %}
+
+{% block body %}
+<div class="container">
+    <h1>Page not found</h1>
+    <p>
+        The requested page couldn't be located. Checkout for any URL
+        misspelling or <a href="{{ path('post') }}">return to the homepage</a>.
+    </p>
+</div>
+{% endblock %}
