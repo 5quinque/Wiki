@@ -15,10 +15,10 @@ class SearchController extends AbstractController
      */
     public function index(string $query, int $page_no)
     {
-        $posts = $this->getDoctrine()->getRepository(Post::class)->
-            findByLikePage($query, $page_no);
-        $pageCount = $this->getDoctrine()->getRepository(Post::class)->
-            getLikePageCount($query);
+        $posts = $this->getDoctrine()->getRepository(Post::class)
+            ->findByLike($query);
+        $pageCount = $this->getDoctrine()->getRepository(Post::class)
+            ->getLikePageCount($query);
 
         return $this->render('index.html.twig', [
             'posts' => $posts,

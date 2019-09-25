@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Post;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * @method Post|null find($id, $lockMode = null, $lockVersion = null)
@@ -18,6 +19,13 @@ class PostRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Post::class);
     }
+
+    //public function page($page_no): object
+    //{
+    //    return $this
+    //        ->setMaxResults(8)
+    //        ->setFirstResult(($page_no - 1) * 8);
+    //}
 
     public function findByLike($query): array
     {

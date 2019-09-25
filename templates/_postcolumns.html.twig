@@ -21,6 +21,9 @@
                     </div>
                     <div class="panel-footer">
                         <a href="{{ path('category', {name: post.category.name}) }}">{{ post.category.name }}</a>
+                        {% if post.user != null %}
+                        <span class="pull-right">{{ post.user.username }}</span>
+                        {% endif %}
                     </div>
                     </div>
                 {% endfor %}
