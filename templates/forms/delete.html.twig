@@ -8,16 +8,11 @@
                 {{ form_start(form) }}
                 {{ form_errors(form) }}
                 <div class="form-group">
-                    {{ form_label(form.title, 'Title') }}
-                    {{ form_widget(form.title, {'attr': {'class': 'form-control', 'placeholder': 'Post Title'}}) }}
+                    Are you sure you want to delete '{{ form.title.vars.value }}'?
                 </div>
                 <div class="form-group">
-                    {{ form_label(form.slug, 'Slug') }}
-                    {{ form_widget(form.slug, {'attr': {'class': 'form-control', 'placeholder': 'Post Slug'}}) }}
-                </div>
-                <div class="form-group">
-                    {{ form_widget(form.delete, {'label': 'Delete',
-                        'attr': {'class': 'btn btn-danger'}}) }}
+                    {{ form_widget(form.delete) }}
+                    <a href="{{ app.request.headers.get('referer') }}" class="btn btn-info">Cancel</a>
                 </div>
                 {{ form_end(form) }}
             </div>
