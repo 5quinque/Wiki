@@ -11,13 +11,18 @@ use Symfony\Component\HttpFoundation\Response;
 class SearchController extends AbstractController
 {
     /**
-     * @Route("/search/{query}", name="search")
+     * @Route("/search/{query}/{page_no<\d+>?1}", name="search")
      */
-    public function index($query)
+    public function index(string $query, int $page_no)
     {
-        $posts = $this->getDoctrine()->getRepository(Post::class)->findByLike($query);
+        $posts = $this->getDoctrine()->getRepository(Post::class)->
+            findByLikePage($query, $page_no);
+        $pageCount = $this->getDoctrine()->getRepository(Post::class)->
+            getLikePageCount($query);
+
         return $this->render('index.html.twig', [
             'posts' => $posts,
+            'page_count' => $pageCount,
         ]);
     }
 

@@ -27,8 +27,8 @@
 
 <script src="//cdn.tinymce.com/4/tinymce.min.js"></script>
 <script>
-    let $type = $('#search');
-    $type.typeahead({
+    let $search = $('#search');
+    $search.typeahead({
         source: function (query, process) {
             $.getJSON(`/json-search/${query}`)
                 .done(function (response) {
@@ -39,6 +39,13 @@
         updater: function (item) {
             window.location.href = item.href;
         }
+    });
+
+    $('#searchform').on('submit', function() {
+        console.log(jQuery(this).attr("action") + $("#search").val());
+        self.location.href = $(this).attr("action") + $search.val();
+        return false;
+
     });
 </script>
 </html>

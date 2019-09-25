@@ -19,11 +19,21 @@ class PostRepository extends ServiceEntityRepository
         parent::__construct($registry, Post::class);
     }
 
-    public function findByLike($value): array
+    public function findByLike($query): array
     {
         return $this->createQueryBuilder('p')
-            ->andWhere('p.title LIKE :value')
-            ->setParameter('value', "%$value%")
+            ->andWhere('p.title LIKE :query')
+            ->setParameter('query', "%$query%")
+            ->orderBy('p.created', 'ASC')
+            ->getQuery()->getResult();
+    }
+    public function findByLikePage($query, $page): array
+    {
+        return $this->createQueryBuilder('p')
+            ->andWhere('p.title LIKE :query')
+            ->setParameter('query', "%$query%")
+            ->setMaxResults(8)
+            ->setFirstResult(($page - 1) * 8)
             ->orderBy('p.created', 'ASC')
             ->getQuery()->getResult();
     }
@@ -46,6 +56,18 @@ class PostRepository extends ServiceEntityRepository
             ->setFirstResult(($page - 1) * 8)
             ->orderBy('p.created', 'ASC')
             ->getQuery()->getResult();
+    }
+
+    public function getLikePageCount($query)
+    {
+        $count = intval($this->createQueryBuilder('p')
+            ->select('count(p.id)')
+            ->andWhere('p.title LIKE :query')
+            ->setParameter('query', "%$query%")
+            ->getQuery()->getSingleScalarResult());
+        $pageCount = $count / 8;
+
+        return ceil($pageCount);
     }
 
     public function getCategoryPageCount($category_id)
