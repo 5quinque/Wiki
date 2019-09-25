@@ -5,7 +5,6 @@ namespace App\Repository;
 use App\Entity\Post;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
-use phpDocumentor\Reflection\Types\Integer;
 
 /* [todo] where to put this? */
 class PageQueryBuilder extends \Doctrine\ORM\QueryBuilder
