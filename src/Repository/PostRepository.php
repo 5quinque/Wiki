@@ -5,13 +5,24 @@ namespace App\Repository;
 use App\Entity\Post;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
-use Doctrine\ORM\Tools\Pagination\Paginator;
+use phpDocumentor\Reflection\Types\Integer;
+
+/* [todo] where to put this? */
+class PageQueryBuilder extends \Doctrine\ORM\QueryBuilder
+{
+    public function page($page_no): array
+    {
+        return $this
+            ->setMaxResults(8)
+            ->setFirstResult(($page_no - 1) * 8)
+            ->getQuery()->getResult();
+    }
+}
 
 /**
- * @method Post|null find($id, $lockMode = null, $lockVersion = null)
- * @method Post|null findOneBy(array $criteria, array $orderBy = null)
  * @method Post[]    findAll()
- * @method Post[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Post[]    findByLike(string $query)
+ * @method Post[]    findByCategory(string $query)
  */
 class PostRepository extends ServiceEntityRepository
 {
@@ -20,53 +31,36 @@ class PostRepository extends ServiceEntityRepository
         parent::__construct($registry, Post::class);
     }
 
-    //public function page($page_no): object
-    //{
-    //    return $this
-    //        ->setMaxResults(8)
-    //        ->setFirstResult(($page_no - 1) * 8);
-    //}
+    public function createQueryBuilder($alias, $indexBy = null)
+    {
+        return (new PageQueryBuilder($this->_em))
+            ->select($alias)
+            ->from($this->_entityName, $alias, $indexBy);
+    }
 
-    public function findByLike($query): array
+    public function findByLike(string $query): object
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.title LIKE :query')
             ->setParameter('query', "%$query%")
-            ->orderBy('p.created', 'ASC')
-            ->getQuery()->getResult();
-    }
-    public function findByLikePage($query, $page): array
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.title LIKE :query')
-            ->setParameter('query', "%$query%")
-            ->setMaxResults(8)
-            ->setFirstResult(($page - 1) * 8)
-            ->orderBy('p.created', 'ASC')
-            ->getQuery()->getResult();
+            ->orderBy('p.created', 'ASC');
     }
 
-    public function findByPage($page): array
+    public function findAll(): object
     {
         return $this->createQueryBuilder('p')
-            ->setMaxResults(8)
-            ->setFirstResult(($page - 1) * 8)
-            ->orderBy('p.created', 'ASC')
-            ->getQuery()->getResult();
+            ->orderBy('p.created', 'ASC');
     }
 
-    public function findByCategoryPage($category_id, $page): array
+    public function findByCategory(int $category_id): object
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.category = :category_id')
             ->setParameter('category_id', $category_id)
-            ->setMaxResults(8)
-            ->setFirstResult(($page - 1) * 8)
-            ->orderBy('p.created', 'ASC')
-            ->getQuery()->getResult();
+            ->orderBy('p.created', 'ASC');
     }
 
-    public function getLikePageCount($query)
+    public function getLikePageCount(string $query): int
     {
         $count = intval($this->createQueryBuilder('p')
             ->select('count(p.id)')
@@ -75,10 +69,10 @@ class PostRepository extends ServiceEntityRepository
             ->getQuery()->getSingleScalarResult());
         $pageCount = $count / 8;
 
-        return ceil($pageCount);
+        return (int) ceil($pageCount);
     }
 
-    public function getCategoryPageCount($category_id)
+    public function getCategoryPageCount(int $category_id): int
     {
         $count = intval($this->createQueryBuilder('p')
             ->select('count(p.id)')
@@ -87,45 +81,17 @@ class PostRepository extends ServiceEntityRepository
             ->getQuery()->getSingleScalarResult());
         $pageCount = $count / 8;
 
-        return ceil($pageCount);
+        return (int) ceil($pageCount);
     }
 
-    public function getPageCount()
+    public function getPageCount(): int
     {
         $count = intval($this->createQueryBuilder('p')
             ->select('count(p.id)')
             ->getQuery()->getSingleScalarResult());
         $pageCount = $count / 8;
 
-        return ceil($pageCount);
+        return (int) ceil($pageCount);
     }
 
-    // /**
-    //  * @return Post[] Returns an array of Post objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Post
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

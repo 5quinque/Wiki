@@ -1,4 +1,4 @@
-#init5 wiki
+# init5 wiki
 
 ## Installation
 

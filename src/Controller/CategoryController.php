@@ -17,7 +17,8 @@ class CategoryController extends AbstractController
     {
         $category_id = $category->getId();
 
-        $posts = $this->getDoctrine()->getRepository(Post::class)->findByCategoryPage($category_id, $page_no);
+        $posts = $this->getDoctrine()->getRepository(Post::class)->findByCategory($category_id)
+            ->page($page_no);
         $pageCount = $this->getDoctrine()->getRepository(Post::class)->getCategoryPageCount($category_id);
 
         return $this->render('category/index.html.twig', [

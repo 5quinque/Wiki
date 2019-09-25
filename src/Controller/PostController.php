@@ -17,7 +17,9 @@ class PostController extends AbstractController
      */
     public function index(int $page_no)
     {
-        $posts = $this->getDoctrine()->getRepository(Post::class)->findByPage($page_no);
+        $posts = $this->getDoctrine()->getRepository(Post::class)->findAll()
+            ->page($page_no);
+
         $pageCount = $this->getDoctrine()->getRepository(Post::class)->getPageCount();
 
         return $this->render('index.html.twig', [

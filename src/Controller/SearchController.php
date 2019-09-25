@@ -16,7 +16,8 @@ class SearchController extends AbstractController
     public function index(string $query, int $page_no)
     {
         $posts = $this->getDoctrine()->getRepository(Post::class)
-            ->findByLike($query);
+            ->findByLike($query)
+            ->page($page_no);
         $pageCount = $this->getDoctrine()->getRepository(Post::class)
             ->getLikePageCount($query);
 
@@ -31,7 +32,10 @@ class SearchController extends AbstractController
      */
     public function json_search($query)
     {
-        $posts = $this->getDoctrine()->getRepository(Post::class)->findByLike($query);
+        $posts = $this->getDoctrine()->getRepository(Post::class)
+            ->findByLike($query)
+            ->getQuery()
+            ->getResult();
 
         $postArr = array();
         foreach($posts as $post) {
